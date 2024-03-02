@@ -2,6 +2,7 @@ import Vue, { createApp } from "vue";
 
 import { FundingAcknowledgment, IconButton, CreditLogos } from "@cosmicds/vue-toolkit";
 import MainComponent from "./MainComponent.vue";
+import "./assets/main.less";
 
 import vuetify from "../plugins/vuetify";
 

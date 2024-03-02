@@ -59,7 +59,7 @@
 
     <!-- This block contains the elements (e.g. icon buttons displayed at/near the top of the screen -->
 
-    <div class="top-content">
+    <div id="top-content">
       <div id="left-buttons">
         <icon-button
           v-model="showTextSheet"
@@ -141,10 +141,10 @@
       <v-card height="100%">
         <v-tabs
           v-model="tab"
+          id="tabs"
           height="32px"
           :color="accentColor"
           :slider-color="accentColor"
-          id="tabs"
           dense
         >
           <v-tab class="info-tabs" tabindex="0"><h3>Information</h3></v-tab>
@@ -263,8 +263,11 @@ export default defineComponent({
     }
   },
   data() {
+    const searchParams = new URLSearchParams(window.location.search);
+    const showSplashScreen = searchParams.get("splash")?.toLowerCase() !== "false";
+    console.log(showSplashScreen);
     return {
-      showSplashScreen: true,
+      showSplashScreen,
       backgroundImagesets: [] as BackgroundImageset[],
       sheet: null as SheetType,
       layersLoaded: false,
@@ -375,7 +378,75 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-#splash-screen {
-  color: #FFFFFF;
+#top-content {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: calc(100% - 2rem);
+  pointer-events: none;
+  display: flex;
+  flex-direction: colmun;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#left-buttons,
+#right-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#center-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.bottom-sheet {
+  .v-overlay__content {
+    align-self: flex-end;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+    height: 34%;
+  }
+}
+
+#tabs {
+  align-self: left;
+}
+
+#tab-items {
+  .v-card-text {
+    font-size: ~"max(14px, calc(0.8em + 0.3vw))";
+    padding-top: ~"max(2vw, 16px)";
+    padding-left: ~"max(4vw, 16px)";
+    padding-right: ~"max(4vw, 16px)";
+  
+    .end-spacer {
+      height: 25px;
+    }
+  }
+}
+
+#close-text-icon {
+  position: absolute;
+  top: 0.25em;
+  color: white;
+
+  @media (max-width: 599px) {
+    right: 0.5em;
+  }
+
+  @media(min-width: 600px) {
+    right: calc((3em - 0.6875em) / 3);  // font-awesome-icons have width 0.6875em
+  }
+}
+
+// This prevents the tabs from having some extra space to the left when the screen is small
+// (around 400px or less)
+.v-tabs:not(.v-tabs--vertical).v-tabs--right>.v-slide-group--is-overflowing.v-tabs-bar--is-mobile:not(.v-slide-group--has-affixes) .v-slide-group__next, .v-tabs:not(.v-tabs--vertical):not(.v-tabs--right)>.v-slide-group--is-overflowing.v-tabs-bar--is-mobile:not(.v-slide-group--has-affixes) .v-slide-group__prev {
+  display: none;
 }
 </style>
